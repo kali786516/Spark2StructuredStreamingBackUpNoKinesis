@@ -205,5 +205,7 @@
     <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming-kafka-0-8-assembly_2.10:2.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming_2.11:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.11.0-M1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.spark:spark-sql-kafka-0-10_2.11:2.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:0.10.0.1" level="project" />
   </component>
 </module>

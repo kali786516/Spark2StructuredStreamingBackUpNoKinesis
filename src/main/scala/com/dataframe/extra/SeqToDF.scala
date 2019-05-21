@@ -8,29 +8,30 @@ import org.apache.log4j.{Level, Logger}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.types.StructType
 
-object Test3 {
+object SeqToDF {
   def main(args: Array[String]): Unit = {
+
     val logger = Logger.getLogger("HbIngestion")
     Logger.getLogger("org").setLevel(Level.WARN)
     Logger.getLogger("akka").setLevel(Level.WARN)
     val startTimeMillis = System.currentTimeMillis()
 
     val spark=SparkSession.builder()
-      .appName("Test2").master("local").config("spark.driver.memory","2g").enableHiveSupport().getOrCreate()
+                          .appName("Test2").master("local").config("spark.driver.memory","2g").enableHiveSupport().getOrCreate()
 
     import spark.implicits._
 
-    val df=spark.createDataFrame(List(("sri",123),("Hari",1234))).toDF("Username","Id")
+    val df = Seq(("Sri","123"),("Hari","786")).toDF("Name","ID")
 
-    df.printSchema()
+    val schemaUntyped = new StructType()
+      .add("name1", "string")
+      .add("id2", "int")
 
-    df.selectExpr("Username","Id","Id as Id2").withColumn("Idcalc",$"Id" - 1).drop("Id").show(10,false)
+    val df2=spark.createDataFrame(df.rdd,schema = schemaUntyped)
 
-    val finacesDF = spark.sql("Select * from parquet.`Output/finances-small`")
+    df2.printSchema()
 
-    finacesDF.createOrReplaceTempView("Finances")
 
-    finacesDF.orderBy("Amount").limit(5).show()
 
 
   }
