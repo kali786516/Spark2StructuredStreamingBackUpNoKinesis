@@ -1,10 +1,5 @@
 package com.dataframe.part6.Email.commons.utils
 
-import java.io.File
-import javax.activation.{DataHandler, DataSource, FileDataSource}
-import javax.mail.{Message, Multipart}
-import javax.mail.internet.{MimeBodyPart, MimeMultipart}
-
 import com.dataframe.part6.Email.workflow.EmailEngineDriverApplication
 
 /**
@@ -19,11 +14,7 @@ import com.amazonaws.services.simpleemail.model.Content
 import com.amazonaws.services.simpleemail.model.Destination
 import com.amazonaws.services.simpleemail.model.Message
 import com.amazonaws.services.simpleemail.model.SendEmailRequest
-import com.amazonaws.services.simpleemail.model.SendRawEmailRequest
-import com.amazonaws.services.simpleemail.model.RawMessage
-//import com.amazonaws.services.simpleemail.model.Destination
 import com.amazonaws.regions.Regions
-import java.util.ArrayList
 import com.dataframe.part6.Email.commons.exception._
 
 
@@ -99,7 +90,6 @@ sealed trait EmailUtilsFunctions {
           // Amazon SES.
           .withRegion(Regions.US_EAST_1).build();
 
-      /*
       val request:SendEmailRequest = new SendEmailRequest()
         .withDestination(
           new Destination().withToAddresses(toEmailID2)
@@ -111,11 +101,8 @@ sealed trait EmailUtilsFunctions {
           .withSubject(new Content()
             .withCharset("UTF-8").withData(emailSubject2)))
         .withSource(fromEmail)
-      // Comment or remove the next line if you are not using a
-      // configuration set
-      //.withConfigurationSetName(CONFIGSET);
       client.sendEmail(request);
-      System.out.println("Email sent!");*/
+      System.out.println("Email sent!");
 
     } catch {
       case ex:Exception => EmailWorkFlowException.printWorkFlowException(ex)
