@@ -179,7 +179,7 @@ object ScalaBasics {
 
     println(arguments1.flatMap(x => toInt(x)))
 
-    println(arguments1.flatMap(x => toInt(x)).sum)
+    //println(arguments1.flatMap(x => toInt(x)).sum)
 
 
 
