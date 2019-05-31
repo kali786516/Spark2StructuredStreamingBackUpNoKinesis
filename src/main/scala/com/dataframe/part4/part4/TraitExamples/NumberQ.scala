@@ -1,4 +1,4 @@
-package com.dataframe.part4.TraitExamples
+package com.dataframe.part4.part4.TraitExamples
 
 /**
   * Created by kalit_000 on 5/24/19.

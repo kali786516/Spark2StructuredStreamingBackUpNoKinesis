@@ -1,24 +1,23 @@
-package com.dataframe.extraDFExamples
-
-/**
-  * Created by kalit_000 on 5/14/19.
-  */
+package com.dataframe.part7.sparkml.Recomendations.explicitRatings
 
 import com.google.common.collect.ImmutableMap
 import org.apache.log4j.{Level, Logger}
-import org.apache.spark.ml.evaluation.RegressionEvaluator
-import org.apache.spark.ml.recommendation.ALS
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.ml.recommendation.ALS
+import org.apache.spark.ml.evaluation.RegressionEvaluator
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types._
 
-object ExplodeTest {
+/**
+  * Created by kalit_000 on 5/30/19.
+  */
+
+object RatingsCollaborativeFiltering {
 
   def main(args: Array[String]): Unit = {
-    val logger = Logger.getLogger("HbIngestion")
+
+    val logger = Logger.getLogger("BikeBuyersDecisionTrees")
     Logger.getLogger("org").setLevel(Level.WARN)
     Logger.getLogger("akka").setLevel(Level.WARN)
-    val startTimeMillis = System.currentTimeMillis()
 
     val spark = SparkSession.builder().appName("Use Collaborative Filtering for movie Recommendations").master("local[*]").getOrCreate()
     val sc = spark.sparkContext
@@ -104,7 +103,7 @@ object ExplodeTest {
 
     userRecs.show(10,false)
 
-    println("Lets get recommendations for singe user and print the results Step  8....................................................")
+    println("Lets get recommendations for singe user and split the data after exploding and print the results Step  8....................................................")
 
     userRecs.createOrReplaceTempView("userRecs")
 
@@ -112,60 +111,58 @@ object ExplodeTest {
 
     moveisDFforOneUSer148.show(10,false)
 
+    userRecs.registerTempTable("tobeexploded")
+
+    val testDf1 = spark.sql("select explode(recommendations) as recommendations from tobeexploded")
+
+    testDf1.createOrReplaceTempView("test2")
+
+    val finalDF = spark.sql("select trim(split(cast(recommendations as string),',')[0]) as movie_id ,trim(split(cast(recommendations as string),',')[1]) as movie_ratings from test2")
+    .select(translate($"movie_id","[","").alias("movieId"),translate($"movie_ratings","]","").alias("movie_ratings_new"))
+
+    finalDF.show(10)
+
+    println("Lets join the data sets Step 9....................................................")
+
+    val movieData=spark.read.format("csv")
+      .option("header","true")
+      .load("sparkMLDataSets/movielens/movies.csv")
+
+    movieData.show(10)
+
+    val recommnendedMovies = movieData.join(finalDF,"movieId").orderBy("movie_ratings_new").selectExpr("title","genres","movie_ratings_new")
+
+    movieData.join(finalDF,"movieId").orderBy($"movie_ratings_new".desc).selectExpr("title","genres","movie_ratings_new").show(10,false)
+
+
+
+    //spark.sql("select split(cast(explode(recommendations) as string),',')[0] as movie_id,split(cast(explode(recommendations) as string),',')[1] as rating from tobeexploded").show()
+
+    /*
     userRecs.selectExpr("explode(recommendations) as recommendations").show()
 
     userRecs.withColumn("ExplodedField", explode($"recommendations")).drop("recommendations").show()
 
-    userRecs.withColumn("ExplodedField", explode($"recommendations")).selectExpr("recommendations[0] as movieID","recommendations[1] as rating").show(10)
+    userRecs.withColumn("ExplodedField", explode(explode($"recommendations"))).printSchema()
 
-    /*
+    //userRecs.withColumn("ExplodedField", explode(explode($"recommendations"))).show()
 
-    //val mySchema = StructType(StructField("keyValueMap",ArrayType(MapType(StringType,IntegerType))))
+    userRecs.withColumn("ExplodedField", explode($"recommendations"))
+                  .selectExpr("recommendations[0] as movieID","recommendations[1] as rating").show(10)
 
-    /*
-    val test = StructType(
-      StructField(comments,ArrayType(StructType(StructField(comId,StringType,true),StructField(content,StringType,true)),true),true),
-      StructField(createHour,StringType,true),
-      StructField(gid,StringType,true),
-      StructField(replies,ArrayType(StructType(StructField(content,StringType,true),StructField(repId,StringType,true)),true),true),
-      StructField(revisions,ArrayType(StructType(StructField(modDate,StringType,true),StructField(revId,StringType,true)),true),true)
-    )*/
+    userRecs.withColumn("ExplodedField", explode(explode($"recommendations")))
+      .select(
+        struct($"userRecs.recommendations[0].alias('movieid')"),
+          struct($"userRecs.recommendations[0].alias('ratings')")).show(10)*/
 
-    //val df = spark.createDataFrame([[[['a','b','c'], ['d','e','f'], ['g','h','i']]]],["col1"])
+    /* collect list example */
+    //val result = df.select($"Id", array($"Name", $"Number", $"Comment") as "List")
+
+    println("Lets join the data with movieLens data set to get movie name Step  9....................................................")
 
 
-    val jsonCompanies = List(
-      """{"company":"NewCo","employees":[{"firstName":"Justin","LastName":"Pihony"},{"firstName":"Jane","LastName":"Doe"}]}""",
-      """{"company":"FamilyCo","employees":[{"firstName":"Rigel","LastName":"Pihony"},{"firstName":"Rory","LastName":"Pihony"}]}""",
-      """{"company":"OldCo","employees":[{"firstName":"Mary","LastName":"Louise"},{"firstName":"Joe","LastName":"Bob"}]}"""
-    )
+    sc.stop()
 
-    val companiesRdd = spark.sparkContext.makeRDD(jsonCompanies)
-
-    val companiesDF = spark.read.json(companiesRdd)
-
-    companiesDF.show(false)
-
-    companiesDF.printSchema()
-
-    println(companiesDF.schema)
-
-    //println(companiesDF.schema.fields.mkString(",\n"))
-
-    //val testScheam=StructType(StructField("company",StringType,true), StructField("employees",ArrayType(StructType(StructField("LastName",StringType,true), StructField("firstName",StringType,true)),true),true))
-
-    //spark.read.schema(testScheam).json(companiesRdd).show(10)
-
-    val comapaniesDFTemp=companiesDF.select($"company",explode($"employees").as("employees"))
-
-    comapaniesDFTemp.show(10)
-
-    val employeeDF=comapaniesDFTemp.select($"company",expr("employees.firstName as firstName"))
-
-    employeeDF.select($"*",when($"company" === "FamilyCo","Premium").when($"company" === "OldCo","Legacy").otherwise("Standard")).show(10)
-
-    companiesDF.select($"company",posexplode($"employees").as(Seq("employeesPosition","employee"))).show(10)
-    */
 
   }
 
