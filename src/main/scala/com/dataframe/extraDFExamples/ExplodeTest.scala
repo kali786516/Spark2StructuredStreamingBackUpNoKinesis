@@ -100,6 +100,18 @@ object ExplodeTest {
 
     val df=spark.createDataFrame(List((148,"sri"),(463,"hari"),(267,"kali"))).toDF("userID","name")
 
+    println("-" * 100)
+
+    println("Check the note :- spark-mllib_2.11:2.3.2")
+
+    /*
+    Below code will work with
+            <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_2.11</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
     val userRecs = model.recommendForUserSubset(df.selectExpr("userID"),5)
 
     userRecs.show(10,false)
@@ -117,6 +129,8 @@ object ExplodeTest {
     userRecs.withColumn("ExplodedField", explode($"recommendations")).drop("recommendations").show()
 
     userRecs.withColumn("ExplodedField", explode($"recommendations")).selectExpr("recommendations[0] as movieID","recommendations[1] as rating").show(10)
+
+    */
 
     /*
 

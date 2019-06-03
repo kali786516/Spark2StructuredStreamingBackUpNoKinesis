@@ -99,6 +99,19 @@ object RatingsCollaborativeFiltering {
 
     val df=spark.createDataFrame(List((148,"sri"),(463,"hari"),(267,"kali"))).toDF("userID","name")
 
+    println("-" * 100 )
+
+    println("note if below code should work cahnge the mllb to <artifactId>spark-mllib_2.11</artifactId> <version>2.3.1</version>")
+
+    /*
+
+            <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_2.11</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
+
     val userRecs = model.recommendForUserSubset(df.selectExpr("userID"),5)
 
     userRecs.show(10,false)
@@ -134,7 +147,7 @@ object RatingsCollaborativeFiltering {
 
     movieData.join(finalDF,"movieId").orderBy($"movie_ratings_new".desc).selectExpr("title","genres","movie_ratings_new").show(10,false)
 
-
+     */
 
     //spark.sql("select split(cast(explode(recommendations) as string),',')[0] as movie_id,split(cast(explode(recommendations) as string),',')[1] as rating from tobeexploded").show()
 

@@ -99,6 +99,7 @@ object implicitRatings {
 
     val usersDF = artistData.selectExpr("id as userID")
 
+    /*
     val userRecs = model.recommendForUserSubset(usersDF,3)
 
     userRecs.show(10,false)
@@ -127,6 +128,7 @@ object implicitRatings {
     val recommnendedMovies = artistData.join(finalDF,"id").orderBy($"artist_weight_new".asc).selectExpr("name","url","artist_weight_new as rating")
 
     artistData.join(finalDF,"id").orderBy($"artist_weight_new".asc).selectExpr("name","url","artist_weight_new as rating").show(10,false)
+    */
 
     sc.stop()
 
