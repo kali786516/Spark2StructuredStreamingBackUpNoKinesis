@@ -12,6 +12,7 @@ import org.apache.spark.sql.types._
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.Calendar
+
 object SparkKafkaConsumer {
   def main(args: Array[String]): Unit = {
     val logger = Logger.getLogger("HbIngestion")

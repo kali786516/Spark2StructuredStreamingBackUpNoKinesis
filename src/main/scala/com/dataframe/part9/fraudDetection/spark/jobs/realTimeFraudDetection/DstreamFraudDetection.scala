@@ -52,10 +52,10 @@ object DstreamFraudDetection extends SparkJob("Feaud Detection using Dstream"){
       "nonFraudTable" -> CassandraConfig.nonFraudTransactionTable,
       "kafkaOffsetTable" -> CassandraConfig.kafkaOffsetTable))
 
-    val ssc = new StreamingContext(sparkSession.sparkContext, Duration(SparkConfig.batchInterval))
+    val ssc                = new StreamingContext(sparkSession.sparkContext, Duration(SparkConfig.batchInterval))
 
 
-    val topics = Set(KafkaConfig.kafkaParams("topic"))
+    val topics             = Set(KafkaConfig.kafkaParams("topic"))
 
     val kafkaParams        =  Map[String, String](
       ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG -> KafkaConfig.kafkaParams("bootstrap.servers"),
