@@ -1,0 +1,10 @@
+pk_id~seq_id~work_flow~comp_name~comp_param~comp_value~created_by~created_date
+1~1~ingestion_poc~read_s3~s3_source_path~s3://bucket/source_file.txt~Sri Tummala~20190101
+2~1~ingestion_poc~read_s3~access_id~${aws_access_id}~Sri Tummala~20190101
+3~1~ingestion_poc~read_s3~secret_key~${aws_secret_key}~Sri Tummala~20190101
+4~2~ingestion_poc~sql_etl~etl_sql~insert overwrite poc_db.target_table partition (load_date='${bus_date}') select * from ingestion_poc_read_s3~Sri Tummala~20190101
+5~2~ingestion_poc~sql_etl~compute_stats~select 1~Sri Tummala~20190101
+6~2~ingestion_poc~sql_etl~sql_options~set hive.exec.dynamic.partition.mode=strict; set hive.enforce.bucketing=false; set hive.exec.max.dynamic.partitions.pernode=10000000;set hive.merge.smallfiles.avgsize=256000000;set hive.merge.size.per.task=256000000;set hive.cbo.enable=true~Sri Tummala~20190101
+7~3~ingestion_poc~complete_audit~complete_audit_sql~select 1~Sri Tummala~20190101
+8~4~ingestion_poc~extract_and_email~extract_and_email_sql~select  concat('<td style=background-color:rgb(242,242,242)>',cast(10 as string),'</td>') AS source_table_count,concat('<td style=background-color:rgb(242,242,242)>',cast(10 as string),'</td>') AS target_table_coun,concat('<td style=background-color:rgb(242,242,242)>',cast(20 as string),'</td>') AS runtime~Sri Tummala~20190101
+

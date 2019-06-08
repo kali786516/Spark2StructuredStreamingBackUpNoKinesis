@@ -19,13 +19,16 @@ object WorkflowExecutor {
   def executeWorkflow(runModule:String,workFlowNode:String,enum:ApplicationConfig.type) ={
 
     val sendExcelReportClassName = enum.classNamesMap.get(enum.SENDEXCELREPORT).get.toString
+    val sendDbEmailAndResultsReport = enum.classNamesMap.get(enum.SENDDBEMAILANDRESULTSREPORT).get.toString
+    val sendHtmlReport = enum.classNamesMap.get(enum.SENDHTMLREPORT).get.toString
 
     (runModule,workFlowNode) match {
+
       case ("excelonly",sendExcelReportClassName)             => val component = ComponentUtil.getComponent(workFlowNode)
                                                                  component.init(enum:ApplicationConfig.type)
-      case ("htmlloopfromdb", "SendDbEmailAndResultsReport")  => val component = ComponentUtil.getComponent(workFlowNode)
+      case ("htmlloopfromdb", sendDbEmailAndResultsReport)    => val component = ComponentUtil.getComponent(workFlowNode)
                                                                  component.init(enum:ApplicationConfig.type)
-      case ("htmltableonly", "SendHtmlReport")                => val component = ComponentUtil.getComponent(workFlowNode)
+      case ("htmltableonly", sendHtmlReport)                  => val component = ComponentUtil.getComponent(workFlowNode)
                                                                  component.init(enum:ApplicationConfig.type)
       case (_,_) => println("Some Error")
 

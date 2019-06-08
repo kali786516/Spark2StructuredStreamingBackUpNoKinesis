@@ -19,7 +19,7 @@ object KafkaSource {
     sparkSession
       .readStream
       .format("kafka")
-      .option("kafka.boostrap.servers",KafkaConfig.kafkaParams("bootstrap.servers"))
+      .option("kafka.bootstrap.servers",KafkaConfig.kafkaParams("bootstrap.servers"))
       .option("subscribe", KafkaConfig.kafkaParams("topic"))
       .option("enable.auto.commit",KafkaConfig.kafkaParams("enable.auto.commit").toBoolean) // Cannot be set to true in Spark Strucutured Streaming https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html#kafka-specific-configurations
       .option("group.id", KafkaConfig.kafkaParams("group.id"))
