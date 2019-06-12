@@ -39,7 +39,6 @@ sealed trait DBFunctions{
         case "impala" => Class.forName("com.cloudera.impala.jdbc41.Driver")
           connection = DriverManager.getConnection(sqlConnection)
         case _ => throw new SqlExecutionEngineNotFound("sql execution engine which is passed not found or available for Execution Engine which was passed:-" + sqlExecutionEngine)
-
       }
       // Open the connection
       statement                       = connection.createStatement();

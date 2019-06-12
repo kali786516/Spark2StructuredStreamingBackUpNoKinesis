@@ -18,9 +18,9 @@ object WorkflowExecutor {
     */
   def executeWorkflow(runModule:String,workFlowNode:String,enum:ApplicationConfig.type) ={
 
-    val sendExcelReportClassName = enum.classNamesMap.get(enum.SENDEXCELREPORT).get.toString
-    val sendDbEmailAndResultsReport = enum.classNamesMap.get(enum.SENDDBEMAILANDRESULTSREPORT).get.toString
-    val sendHtmlReport = enum.classNamesMap.get(enum.SENDHTMLREPORT).get.toString
+    val sendExcelReportClassName         = enum.classNamesMap.get(enum.SENDEXCELREPORT).get.toString
+    val sendDbEmailAndResultsReport      = enum.classNamesMap.get(enum.SENDDBEMAILANDRESULTSREPORT).get.toString
+    val sendHtmlReport                   = enum.classNamesMap.get(enum.SENDHTMLREPORT).get.toString
 
     (runModule,workFlowNode) match {
 

@@ -1,22 +1,14 @@
-package com.dataframe.part6.Email.components
+package com.dataframe.part10.IngestionPOC.components
+
+import com.dataframe.part10.IngestionPOC.components.Component
+import com.dataframe.part10.IngestionPOC.commons.exception._
 
 /**
-  * Created by kalit_000 on 5/27/19.
+  * Created by kalit_000 on 6/11/19.
   */
-
-import com.dataframe.part6.Email.commons.exception._
-import com.dataframe.part6.Email.components.Component
-import com.dataframe.part6.Email.components.SendExcelReport
-import java.util.Properties
-
 object ComponentUtil {
 
-  /**
-    * This method takes in component name and returns a component class loader class
-    * @param compName
-    * @return
-    */
-  def getComponent(compName:String):Component ={
+  def getComponent(compName:String):Component = {
 
     var component:Option[Component] = None
 
@@ -24,7 +16,7 @@ object ComponentUtil {
 
     try {
 
-      val clazz                     = classLoader.loadClass(s"com.dataframe.part6.Email.components.${compName}")
+      val clazz                     = classLoader.loadClass(s"com.dataframe.part10.IngestionPOC.components.${compName}")
       component                     = Some(clazz.newInstance().asInstanceOf[Component])
     } catch {
       case _: ClassNotFoundException =>
@@ -35,7 +27,7 @@ object ComponentUtil {
         } catch {
           case _: ClassNotFoundException =>
             try {
-              val clazz             = classLoader.loadClass(s"com.dataframe.part6.Email.components.$compName")
+              val clazz             = classLoader.loadClass(s"com.dataframe.part10.IngestionPOC.components.$compName")
 
               component             = Some(clazz.newInstance().asInstanceOf[Component])
             } catch {
@@ -46,7 +38,7 @@ object ComponentUtil {
                   component         = Some(clazz.newInstance().asInstanceOf[Component])
                 } catch {
                   case e: ClassNotFoundException =>
-                    throw EmailException(s"Component $compName Not Found in Classpath", e)
+                    throw IngestionException(s"Component $compName Not Found in Classpath", e)
                 }
 
             }
@@ -54,7 +46,6 @@ object ComponentUtil {
 
     }
     component.get
-
   }
 
 }

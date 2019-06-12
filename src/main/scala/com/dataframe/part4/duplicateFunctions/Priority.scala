@@ -17,13 +17,13 @@ class Task(val value:String,val priority:Priority,val status:Status){
 
 object Priority{
 
-  val high = new Priority("high")
+  val high   = new Priority("high")
   val medium = new Priority("medium")
-  val low = new Priority("low")
+  val low    = new Priority("low")
 
-  val todo = new Status("todo")
+  val todo       = new Status("todo")
   val inProgress = new Status("inProgress")
-  val done = new Status("done")
+  val done       = new Status("done")
 
   val t1 = new Task("Finish Scala Module",high,inProgress)
   val t2 = new Task("Book Flight tickets",high,todo)
@@ -40,9 +40,9 @@ object Priority{
   }
 
   def highPriotiytTasks = (task:Task) => task.priority == high
-  def lowPriotitTasks = (task:Task) => task.priority == low
-  def tasksInProgreas = (task:Task) => task.priority == inProgress
-  def taskToDo = (task:Task) => task.priority == todo
+  def lowPriotitTasks   = (task:Task) => task.priority == low
+  def tasksInProgreas   = (task:Task) => task.priority == inProgress
+  def taskToDo          = (task:Task) => task.priority == todo
 
   getTasksMatching(highPriotiytTasks) foreach(println)
   getTasksMatching(lowPriotitTasks) foreach(println)
